@@ -2,6 +2,7 @@ import { adminDb } from "@/app/storage/storage-admin";
 import { NextResponse } from "next/server";
 import { Expense } from "../types/types";
 import { isToday } from "date-fns";
+import { Timestamp } from "firebase-admin/firestore";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
@@ -24,7 +25,10 @@ export async function GET(req: Request) {
       if (expenseCategory) {
         const ecSnapshot = await expenseCategory.get();
         ecData = ecSnapshot.exists
-          ? { id: expenseCategory.id, ...ecSnapshot.data() }
+          ? {
+              id: `/ExpenseCategory/${expenseCategory.id}`,
+              ...ecSnapshot.data(),
+            }
           : null;
       }
 
@@ -38,4 +42,26 @@ export async function GET(req: Request) {
   );
 
   return NextResponse.json(refinedExpenses);
+}
+
+export async function POST(req: Request, res: Response) {
+  try {
+    const body = await req.json();
+
+    const { expenseCategory, amount, timestamp } = body;
+    const categoryRef = adminDb
+      .collection("ExpenseCategory")
+      .doc(expenseCategory);
+
+    await adminDb.collection("Expense").add({
+      expenseCategory: categoryRef,
+      amount,
+      timestamp: Timestamp.fromDate(new Date()),
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Erreur API /expenses:", error);
+    return NextResponse.json({ error }, { status: 500 });
+  }
 }

@@ -24,17 +24,25 @@ export const ExpenseForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    const payload = {
-      expenseCategory: formData.expenseCategory,
-      amount: Number(formData.amount),
-      timestamp: new Date().getTime(),
-    };
+    try {
+      const res = await fetch("/api/expenses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          expenseCategory: formData.expenseCategory,
+          amount: Number(formData.amount),
+        }),
+      });
 
-    console.log("Form submitted:", payload);
-    // Ici tu peux faire un addDoc(collection(db, "expenses"), payload)
+      if (!res.ok) throw new Error("Erreur API");
+
+      console.log("Dépense enregistrée ✅");
+    } catch (err) {
+      console.error("Erreur submit:", err);
+    }
   };
 
   return (
@@ -43,7 +51,7 @@ export const ExpenseForm = () => {
       className="flex flex-col gap-4 p-4 max-w-md mx-auto bg-white rounded-2xl shadow"
     >
       <div className="flex flex-col gap-2">
-        <label className="font-medium">Catégorie</label>
+        <label className="font-medium">Expense Category</label>
         <div className="flex flex-col gap-1">
           {expenseCategories.map((cat) => (
             <label key={cat.id} className="flex items-center gap-2">
@@ -64,7 +72,7 @@ export const ExpenseForm = () => {
 
       <div className="flex flex-col gap-2">
         <label htmlFor="amount" className="font-medium">
-          Montant
+          Amount
         </label>
         <input
           type="number"
@@ -82,7 +90,7 @@ export const ExpenseForm = () => {
         type="submit"
         className="bg-blue-600 text-white rounded-lg py-2 px-4 hover:bg-blue-700 transition"
       >
-        Enregistrer
+        Save
       </button>
     </form>
   );
