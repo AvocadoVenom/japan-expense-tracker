@@ -1,13 +1,13 @@
 "use client";
 
 import { ExpenseForm } from "./components/ExpenseForm";
-import ExpenseList from "./components/ExpenseList";
+import ExpensesSummary from "./components/ExpensesSummary";
 
 export default function Home() {
   return (
-    <main className="flex flex-col gap-[32px] items-center">
+    <main className="flex flex-col gap-[28px] items-center">
       <ExpenseForm />
-      <ExpenseList />
+      <ExpensesSummary />
     </main>
   );
 }

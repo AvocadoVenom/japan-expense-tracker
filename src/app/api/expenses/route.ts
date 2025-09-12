@@ -26,7 +26,7 @@ export async function GET(req: Request) {
         const ecSnapshot = await expenseCategory.get();
         ecData = ecSnapshot.exists
           ? {
-              id: `/ExpenseCategory/${expenseCategory.id}`,
+              id: expenseCategory.id,
               ...ecSnapshot.data(),
             }
           : null;

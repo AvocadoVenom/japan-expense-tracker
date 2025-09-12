@@ -9,7 +9,7 @@ export default function ExpenseList() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/expenses?fromToday=true")
+    fetch("/api/expenses")
       .then((res) => res.json())
       .then((data) => setExpenses(data))
       .finally(() => setIsLoading(false));

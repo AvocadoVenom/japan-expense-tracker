@@ -12,7 +12,7 @@ export async function GET() {
       if (expenseCategory) {
         const ecSnapshot = await expenseCategory.get();
         ecData = ecSnapshot.exists
-          ? { id: expenseCategory, ...ecSnapshot.data() }
+          ? { id: expenseCategory.id, ...ecSnapshot.data() }
           : null;
       }
 
