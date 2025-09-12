@@ -7,11 +7,13 @@ export const ExpenseForm = () => {
   const [expenseCategories, setExpenseCategories] = useState<ExpenseCategory[]>(
     []
   );
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/expense-categories")
       .then((res) => res.json())
-      .then((data) => setExpenseCategories(data));
+      .then((data) => setExpenseCategories(data))
+      .finally(() => setIsLoading(false));
   }, []);
 
   const [formData, setFormData] = useState({
@@ -54,20 +56,22 @@ export const ExpenseForm = () => {
       <div className="flex flex-col gap-2">
         <label className="font-medium">Expense Category</label>
         <div className="flex flex-col gap-1">
-          {expenseCategories.map((cat) => (
-            <label key={cat.id} className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="expenseCategory"
-                value={cat.id}
-                checked={formData.expenseCategory === cat.id}
-                onChange={handleChange}
-                className="accent-blue-600"
-                required
-              />
-              {cat.name}
-            </label>
-          ))}
+          {isLoading
+            ? "Loading categories..."
+            : expenseCategories.map((cat) => (
+                <label key={cat.id} className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="expenseCategory"
+                    value={cat.id}
+                    checked={formData.expenseCategory === cat.id}
+                    onChange={handleChange}
+                    className="accent-blue-600"
+                    required
+                  />
+                  {cat.name}
+                </label>
+              ))}
         </div>
       </div>
 
