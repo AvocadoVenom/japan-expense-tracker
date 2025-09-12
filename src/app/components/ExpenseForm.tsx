@@ -48,8 +48,9 @@ export const ExpenseForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-4 p-4 max-w-md mx-auto bg-white rounded-2xl shadow"
+      className="flex flex-col gap-4 w-full p-4 bg-stone-900 border border-stone-600 border-2 rounded-xl"
     >
+      <h2 className="uppercase text-xl">Register new expense</h2>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Expense Category</label>
         <div className="flex flex-col gap-1">

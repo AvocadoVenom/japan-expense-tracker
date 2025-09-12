@@ -16,7 +16,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="w-screen h-screen p-10">
+      <body className="w-screen h-screen p-10 bg-stone-950">
+        <h1 className="uppercase text-7xl mb-6">Japan Expense Tracker</h1>
         {children}
         <FloatingMenuButton />
       </body>
