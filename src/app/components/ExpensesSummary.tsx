@@ -11,7 +11,9 @@ type ThresholdState = DailyExpenseRule & {
 
 export default function ExpensesSummary() {
   const [expenses, setExpenses] = useState<ExpenseModel[]>([]);
+  const [expensesFetched, setExpensesFetched] = useState(false);
   const [expenseRules, setExpenseRules] = useState<DailyExpenseRule[]>([]);
+  const [expenseRulesFetched, setExpenseRulesFetched] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -19,10 +21,16 @@ export default function ExpensesSummary() {
     Promise.all([
       fetch("/api/daily-expense-rules")
         .then((res) => res.json())
-        .then((data) => setExpenseRules(data)),
+        .then((data) => {
+          setExpenseRules(data);
+          setExpenseRulesFetched(true);
+        }),
       fetch("/api/expenses?fromToday=true")
         .then((res) => res.json())
-        .then((data) => setExpenses(data)),
+        .then((data) => {
+          setExpenses(data);
+          setExpensesFetched(true);
+        }),
     ]);
   }, []);
 
@@ -49,7 +57,7 @@ export default function ExpensesSummary() {
     );
 
     setIsLoading(false);
-  }, [expenses.length > 0 && expenseRules.length > 0]);
+  }, [expenseRulesFetched && expensesFetched]);
 
   return (
     <div className="flex flex-col content-stretch w-full">
@@ -64,7 +72,7 @@ export default function ExpensesSummary() {
                 className="flex flex-col gap-1 content-stretch"
               >
                 <label htmlFor={state.expenseCategory?.name}>
-                  {state.expenseCategory?.name}
+                  {state.expenseCategory?.name} - ¥{state.consumed}
                 </label>
                 <ProgressBar
                   progress={state.progress}
