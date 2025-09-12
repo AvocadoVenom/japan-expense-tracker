@@ -1,9 +1,10 @@
+import DailyExpenseRuleList from "../components/DailyExpenseRuleList";
+
 export default function Settings() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <h1>Settings page</h1>
-      </main>
-    </div>
+    <main className="p-4 flex flex-col gap-[32px] items-center">
+      <h1>Daily expense rules</h1>
+      <DailyExpenseRuleList />
+    </main>
   );
 }
