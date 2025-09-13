@@ -50,28 +50,40 @@ export const ExpenseForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-4 w-full p-4 bg-stone-900 border border-stone-600 border-2 rounded-xl"
+      className="flex flex-col gap-3 w-full p-4 bg-stone-900 border border-stone-600 border-2 rounded-xl"
     >
       <h2 className="uppercase text-xl">Register new expense</h2>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Expense Category</label>
         <div className="flex flex-col gap-1">
-          {isLoading
-            ? "Loading categories..."
-            : expenseCategories.map((cat) => (
-                <label key={cat.id} className="flex items-center gap-2">
+          {isLoading ? (
+            "Loading categories..."
+          ) : (
+            <div className="flex gap-3">
+              {expenseCategories.map((cat) => (
+                <label key={cat.id}>
                   <input
                     type="radio"
                     name="expenseCategory"
                     value={cat.id}
                     checked={formData.expenseCategory === cat.id}
                     onChange={handleChange}
-                    className="accent-blue-600"
+                    className="peer hidden"
                     required
                   />
-                  {cat.name}
+                  <span
+                    className="
+          inline-block cursor-pointer rounded-lg border border-gray-600 
+          px-4 py-2 text-sm font-medium text-gray-300
+          transition peer-checked:bg-blue-600 peer-checked:text-white
+        "
+                  >
+                    {cat.name}
+                  </span>
                 </label>
               ))}
+            </div>
+          )}
         </div>
       </div>
 
