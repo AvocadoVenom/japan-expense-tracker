@@ -16,10 +16,11 @@ export const ExpenseForm = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     expenseCategory: "",
     amount: "",
-  });
+  };
+  const [formData, setFormData] = useState(initialFormData);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -41,7 +42,7 @@ export const ExpenseForm = () => {
 
       if (!res.ok) throw new Error("Erreur API");
 
-      console.log("Dépense enregistrée ✅");
+      setFormData(initialFormData);
     } catch (err) {
       console.error("Erreur submit:", err);
     }
