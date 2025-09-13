@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import { DailyExpenseRule, Expense as ExpenseModel } from "../api/types/types";
 import { ProgressBar } from "./atoms/ProgressBar";
+import { Tag } from "./atoms/Tag";
 
 type ThresholdState = DailyExpenseRule & {
   consumed: number;
   progress: number;
+  color: string;
 };
 
 export default function ExpensesSummary() {
@@ -50,6 +52,7 @@ export default function ExpensesSummary() {
           ...rule,
           consumed,
           progress: (consumed / rule.maxAmount) * 100,
+          color: getColor(rule.expenseCategory?.name ?? ""),
         });
 
         return states;
@@ -71,9 +74,13 @@ export default function ExpensesSummary() {
                 key={state.id}
                 className="flex flex-col gap-1 content-stretch"
               >
-                <label htmlFor={state.expenseCategory?.name}>
-                  {state.expenseCategory?.name} - ¥{state.consumed}
-                </label>
+                <div className="flex gap-4 items-center">
+                  <Tag
+                    text={state.expenseCategory?.name ?? "NA"}
+                    color={state.color}
+                  />
+                  <span>¥{state.consumed}</span>
+                </div>
                 <ProgressBar
                   progress={state.progress}
                   color={computeColor(state.progress)}
@@ -98,4 +105,13 @@ const computeColor = (
     return "bg-red-400";
   }
   return "bg-purple-400";
+};
+
+const getColor = (categoryName: string) => {
+  if (categoryName === "Food") {
+    return "bg-red-400";
+  } else if (categoryName === "Leasure") {
+    return "bg-teal-400";
+  }
+  return "bg-stone-400";
 };
