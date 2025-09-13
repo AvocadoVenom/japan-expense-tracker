@@ -44,11 +44,11 @@ export async function GET(req: Request) {
   return NextResponse.json(refinedExpenses);
 }
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const { expenseCategory, amount, timestamp } = body;
+    const { expenseCategory, amount } = body;
     const categoryRef = adminDb
       .collection("ExpenseCategory")
       .doc(expenseCategory);
