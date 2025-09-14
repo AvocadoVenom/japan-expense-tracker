@@ -31,11 +31,16 @@ export const ExpensesHistory = () => {
         groupByDate.expenses.push(expense);
       }
       return groups;
-    }, []);
+    }, [])
+    .sort((a, b) => {
+      if (new Date(a.date).getTime() > new Date(b.date).getTime()) return -1;
+      if (new Date(a.date).getTime() <= new Date(b.date).getTime()) return 1;
+      return 0;
+    });
 
   return (
     <div className="flex flex-col gap-2 content-stretch w-full">
-      {groupedByDate.map((group, index, groups) => (
+      {groupedByDate.map((group) => (
         <div key={group.date} className="flex flex-col gap-2 content-stretch">
           <label htmlFor={group.date} className="text-white">
             {group.date}
@@ -43,7 +48,6 @@ export const ExpensesHistory = () => {
           <div className="flex flex-col gap-2 content-stretch">
             <ExpensesSummary expenses={group.expenses} rules={rules} isPast />
           </div>
-          {index !== groups.length - 1 && <hr />}
         </div>
       ))}
     </div>
