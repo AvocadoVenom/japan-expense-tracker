@@ -3,7 +3,16 @@
 import { useState } from "react";
 import { useExpenseCategories } from "../api/hooks/expense-categories";
 
-export const ExpenseForm = () => {
+export type ExpenseFormData = {
+  expenseCategory: string;
+  amount: number;
+};
+
+type Props = {
+  onExpenseSubmitted: (formData: ExpenseFormData) => void;
+};
+
+export const ExpenseForm = ({ onExpenseSubmitted }: Props) => {
   const { data: expenseCategories, isLoading: isFetchingExpenseCategories } =
     useExpenseCategories();
 
@@ -21,22 +30,17 @@ export const ExpenseForm = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    try {
-      const res = await fetch("/api/expenses", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          expenseCategory: formData.expenseCategory,
-          amount: Number(formData.amount),
-        }),
-      });
-
-      if (!res.ok) throw new Error("Erreur API");
-
-      setFormData(initialFormData);
-    } catch (err) {
-      console.error("Erreur submit:", err);
+    if (formData.expenseCategory === "" || formData.amount === "") {
+      alert("Complete the form");
+      return;
     }
+
+    onExpenseSubmitted({
+      expenseCategory: formData.expenseCategory,
+      amount: Number(formData.amount),
+    });
+
+    setFormData(initialFormData);
   };
 
   return (
