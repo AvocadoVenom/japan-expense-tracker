@@ -1,20 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ExpenseCategory } from "../api/types/types";
+import { useState } from "react";
+import { useExpenseCategories } from "../api/hooks/expense-categories";
 
 export const ExpenseForm = () => {
-  const [expenseCategories, setExpenseCategories] = useState<ExpenseCategory[]>(
-    []
-  );
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/api/expense-categories")
-      .then((res) => res.json())
-      .then((data) => setExpenseCategories(data))
-      .finally(() => setIsLoading(false));
-  }, []);
+  const { data: expenseCategories, isLoading: isFetchingExpenseCategories } =
+    useExpenseCategories();
 
   const initialFormData = {
     expenseCategory: "",
@@ -55,13 +46,12 @@ export const ExpenseForm = () => {
     >
       <h2 className="uppercase text-xl">Register new expense</h2>
       <div className="flex flex-col gap-2">
-        <label className="font-medium">Expense Category</label>
         <div className="flex flex-col gap-1">
-          {isLoading ? (
+          {isFetchingExpenseCategories ? (
             "Loading categories..."
           ) : (
-            <div className="flex gap-3">
-              {expenseCategories.map((cat) => (
+            <div className="flex content-stretch space-between gap-3">
+              {(expenseCategories ?? []).map((cat) => (
                 <label key={cat.id}>
                   <input
                     type="radio"
@@ -89,9 +79,6 @@ export const ExpenseForm = () => {
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="amount" className="font-medium">
-          Amount
-        </label>
         <input
           type="number"
           id="amount"
@@ -99,7 +86,7 @@ export const ExpenseForm = () => {
           value={formData.amount}
           onChange={handleChange}
           className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Entrez le montant"
+          placeholder="Amount"
           required
         />
       </div>

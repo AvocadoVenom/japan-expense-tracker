@@ -1,20 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 
 export default function FloatingMenuButton() {
-  const pathName = usePathname();
-  const router = useRouter();
-
   const [isWrapped, toggleWrapped] = useState(true);
 
   return (
-    <aside className="absolute right-[24px] bottom-[24px] flex flex-col-reverse items-center">
+    <aside className="absolute right-[16px] top-[16px] flex flex-col items-center">
       <button
         type="button"
-        className="rounded-[50%] bg-white cursor-pointer w-[48px] h-[48px] text-2xl mt-3"
+        className="rounded-[50%] bg-white cursor-pointer w-[48px] h-[48px] text-2xl mb-3"
         onClick={() => toggleWrapped(!isWrapped)}
       >
         {isWrapped ? "➕" : "➖"}
