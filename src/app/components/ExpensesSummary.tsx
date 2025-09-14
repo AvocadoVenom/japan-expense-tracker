@@ -40,19 +40,35 @@ export const ExpensesSummary = ({ rules, expenses, isPast = false }: Props) => {
   }, []);
 
   return (
-    <div className="flex flex-col content-stretch w-full">
+    <div
+      className={`flex flex-col content-stretch w-full ${
+        isPast ? "border border-stone-600 border-2 rounded-xl p-4" : ""
+      }`}
+    >
       <div className="flex flex-col gap-2 content-stretch">
-        <div className="flex flex-col gap-1 content-stretch">
-          <div className="flex gap-4 items-center">
-            <h3>Remaining</h3>
-            <span>¥{Math.max(0, maxAllowed - totalConsumed)}</span>
-          </div>
-          <ProgressBar
-            progress={(totalConsumed / maxAllowed) * 100}
-            color={computeColor(totalConsumed)}
-          />
-        </div>
-        <hr className="my-2 border-stone-600 border" />
+        {!isPast ? (
+          <>
+            <div className="flex flex-col gap-1 content-stretch">
+              <div className="flex gap-4 items-center">
+                <h3>Remaining</h3>
+                <span>¥{Math.max(0, maxAllowed - totalConsumed)}</span>
+              </div>
+              <ProgressBar
+                progress={(totalConsumed / maxAllowed) * 100}
+                color={computeColor(totalConsumed)}
+              />
+            </div>
+            <hr className="my-2 border-stone-600 border" />
+          </>
+        ) : maxAllowed - totalConsumed > 0 ? (
+          <strong className="text-green-600">
+            Remained: ¥{maxAllowed - totalConsumed}
+          </strong>
+        ) : (
+          <strong className="text-red-400">
+            Exceeded: ¥{Math.abs(maxAllowed - totalConsumed)}
+          </strong>
+        )}
         {thresholdStates.map((state) => {
           return (
             <div key={state.id} className="flex flex-col gap-1 content-stretch">
