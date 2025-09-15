@@ -15,6 +15,8 @@ export const useExpenses = (
   return useQuery<Expense[]>({
     queryKey: [REACT_QUERY_TAGS.EXPENSES],
     queryFn: () => fetchExpenses(params.fromToday),
+    staleTime: 0,
+    gcTime: 0,
   });
 };
 
