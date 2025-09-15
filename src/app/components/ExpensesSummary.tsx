@@ -3,6 +3,10 @@
 import { DailyExpenseRule, Expense as ExpenseModel } from "../api/types/types";
 import { ProgressBar } from "./atoms/ProgressBar";
 import { CategoryTag } from "./atoms/CategoryTag";
+import { useState } from "react";
+import { Modal } from "./atoms/Modal";
+import { Expense } from "./atoms/Expense";
+import { format } from "date-fns";
 
 type Props = {
   rules: DailyExpenseRule[];
@@ -39,52 +43,93 @@ export const ExpensesSummary = ({ rules, expenses, isPast = false }: Props) => {
     return states;
   }, []);
 
+  const [open, setOpen] = useState(false);
+  const [expenseListDetails, setExpenseListDetails] = useState<ExpenseModel[]>(
+    []
+  );
+
   return (
-    <div
-      className={`flex flex-col content-stretch w-full ${
-        isPast ? "border border-stone-600 border-2 rounded-xl p-4" : ""
-      }`}
-    >
-      <div className="flex flex-col gap-2 content-stretch">
-        {!isPast ? (
-          <>
-            <div className="flex flex-col gap-1 content-stretch">
-              <div className="flex gap-4 items-center">
-                <h3>Remaining</h3>
-                <span>¥{Math.max(0, maxAllowed - totalConsumed)}</span>
+    <>
+      <div
+        className={`flex flex-col content-stretch w-full ${
+          isPast ? "border border-stone-600 border-2 rounded-xl p-4" : ""
+        }`}
+      >
+        <div className="flex flex-col gap-2 content-stretch">
+          {!isPast ? (
+            <>
+              <div className="flex flex-col gap-1 content-stretch">
+                <div
+                  className="flex gap-4 items-center"
+                  onClick={() => {
+                    setExpenseListDetails(expenses);
+                    setOpen(true);
+                  }}
+                >
+                  <h3>Remaining</h3>
+                  <span>¥{Math.max(0, maxAllowed - totalConsumed)}</span>
+                </div>
+                <ProgressBar
+                  progress={(totalConsumed / maxAllowed) * 100}
+                  color={computeColor(totalConsumed)}
+                />
               </div>
-              <ProgressBar
-                progress={(totalConsumed / maxAllowed) * 100}
-                color={computeColor(totalConsumed)}
-              />
-            </div>
-            <hr className="my-2 border-stone-600 border" />
-          </>
-        ) : maxAllowed - totalConsumed > 0 ? (
-          <strong className="text-green-600">
-            Remained: ¥{maxAllowed - totalConsumed}
-          </strong>
-        ) : (
-          <strong className="text-red-400">
-            Exceeded: ¥{Math.abs(maxAllowed - totalConsumed)}
-          </strong>
-        )}
-        {thresholdStates.map((state) => {
-          return (
-            <div key={state.id} className="flex flex-col gap-1 content-stretch">
-              <div className="flex gap-4 items-center">
-                <CategoryTag category={state.expenseCategory?.name} />
-                <span>¥{state.consumed}</span>
+              <hr className="my-2 border-stone-600 border" />
+            </>
+          ) : maxAllowed - totalConsumed > 0 ? (
+            <strong className="text-green-600">
+              Remained: ¥{maxAllowed - totalConsumed}
+            </strong>
+          ) : (
+            <strong className="text-red-400">
+              Exceeded: ¥{Math.abs(maxAllowed - totalConsumed)}
+            </strong>
+          )}
+          {thresholdStates.map((state) => {
+            return (
+              <div
+                key={state.id}
+                className="flex flex-col gap-1 content-stretch"
+              >
+                <div
+                  className="flex gap-4 items-center"
+                  onClick={() => {
+                    setExpenseListDetails(
+                      expenses.filter(
+                        (exp) =>
+                          exp.expenseCategory?.id === state.expenseCategory?.id
+                      )
+                    );
+                    setOpen(true);
+                  }}
+                >
+                  <CategoryTag category={state.expenseCategory?.name} />
+                  <span>¥{state.consumed}</span>
+                </div>
+                <ProgressBar
+                  progress={state.progress}
+                  color={computeColor(state.progress)}
+                />
               </div>
-              <ProgressBar
-                progress={state.progress}
-                color={computeColor(state.progress)}
-              />
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
-    </div>
+
+      <Modal isOpen={open} onClose={() => setOpen(false)}>
+        <h2 className="text-xl font-bold mb-2">Expense details</h2>
+        <div className="flex flex-col content-stretch gap-2">
+          {expenseListDetails.map((exp) => (
+            <div className="flex items-center gap-2">
+              <p className="text-nowrap min-w-[35%]">
+                {format(exp.timestamp, "MM-dd HH:mm")}
+              </p>
+              <Expense expense={exp} />
+            </div>
+          ))}
+        </div>
+      </Modal>
+    </>
   );
 };
 
