@@ -5,7 +5,7 @@ import { useAddExpense, useExpenses } from "./api/hooks/expenses";
 import { ExpenseForm, ExpenseFormData } from "./components/ExpenseForm";
 import { ExpensesSummary } from "./components/ExpensesSummary";
 
-export const Home = () => {
+export default function Home() {
   const { data: todayExpenses, status: expensesFetchingStatus } = useExpenses({
     fromToday: true,
   });
@@ -29,6 +29,4 @@ export const Home = () => {
   }
 
   return "Loading expenses & rules...";
-};
-
-export default Home;
+}
