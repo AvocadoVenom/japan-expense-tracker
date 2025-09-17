@@ -87,12 +87,9 @@ export const ExpensesSummary = ({ rules, expenses, isPast = false }: Props) => {
           )}
           {thresholdStates.map((state) => {
             return (
-              <div
-                key={state.id}
-                className="flex flex-col gap-1 content-stretch"
-              >
+              <div key={state.id} className="flex gap-2 items-center">
                 <div
-                  className="flex gap-4 items-center"
+                  className="flex gap-2 items-center"
                   onClick={() => {
                     setExpenseListDetails(
                       expenses.filter(
@@ -107,6 +104,7 @@ export const ExpensesSummary = ({ rules, expenses, isPast = false }: Props) => {
                   <span>¥{state.consumed}</span>
                 </div>
                 <ProgressBar
+                  className="grow"
                   progress={state.progress}
                   color={computeColor(state.progress)}
                 />
