@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Modal } from "./atoms/Modal";
 import { Expense } from "./atoms/Expense";
 import { format } from "date-fns";
+import { SummaryStatement } from "./atoms/SummaryStatement";
 
 type Props = {
   rules: DailyExpenseRule[];
@@ -66,7 +67,10 @@ export const ExpensesSummary = ({ rules, expenses, isPast = false }: Props) => {
                     setOpen(true);
                   }}
                 >
-                  <h3>Remaining</h3>
+                  <SummaryStatement
+                    allowed={maxAllowed}
+                    consumed={totalConsumed}
+                  />
                 </div>
                 <ProgressBar
                   progress={(totalConsumed / maxAllowed) * 100}
@@ -82,14 +86,12 @@ export const ExpensesSummary = ({ rules, expenses, isPast = false }: Props) => {
               </div>
               <hr className="my-2 border-stone-600 border" />
             </>
-          ) : maxAllowed - totalConsumed > 0 ? (
-            <strong className="text-green-600">
-              Remained: ¥{maxAllowed - totalConsumed}
-            </strong>
           ) : (
-            <strong className="text-red-400">
-              Exceeded: ¥{Math.abs(maxAllowed - totalConsumed)}
-            </strong>
+            <SummaryStatement
+              allowed={maxAllowed}
+              consumed={totalConsumed}
+              isPast
+            />
           )}
           {thresholdStates.map((state) => {
             return (
