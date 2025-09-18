@@ -67,11 +67,17 @@ export const ExpensesSummary = ({ rules, expenses, isPast = false }: Props) => {
                   }}
                 >
                   <h3>Remaining</h3>
-                  <span>¥{Math.max(0, maxAllowed - totalConsumed)}</span>
                 </div>
                 <ProgressBar
                   progress={(totalConsumed / maxAllowed) * 100}
-                  color={computeColor(totalConsumed)}
+                  colors={{
+                    main: computeColor(totalConsumed),
+                    text:
+                      (totalConsumed / maxAllowed) * 100 > 85
+                        ? "text-white"
+                        : "text-gray-600",
+                  }}
+                  text={`¥${Math.max(0, maxAllowed - totalConsumed)}`}
                 />
               </div>
               <hr className="my-2 border-stone-600 border" />
@@ -101,12 +107,15 @@ export const ExpensesSummary = ({ rules, expenses, isPast = false }: Props) => {
                   }}
                 >
                   <CategoryTag category={state.expenseCategory?.name} />
-                  <span>¥{state.consumed}</span>
                 </div>
                 <ProgressBar
                   className="grow"
                   progress={state.progress}
-                  color={computeColor(state.progress)}
+                  colors={{
+                    main: computeColor(state.progress),
+                    text: state.progress > 85 ? "text-white" : "text-gray-600",
+                  }}
+                  text={`¥${state.consumed}`}
                 />
               </div>
             );
