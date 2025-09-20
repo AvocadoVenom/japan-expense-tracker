@@ -49,3 +49,10 @@ body {
     transform: scale(1);
   }
 }
+
+@media (min-width: 801px) {
+  body {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
