@@ -1,25 +1,32 @@
 import { adminDb } from "@/app/storage/storage-admin";
+import { firestore } from "firebase-admin";
 import { NextResponse } from "next/server";
 import { Expense } from "../types/types";
-import { isToday } from "date-fns";
+import { startOfToday } from "date-fns";
 import { Timestamp } from "firebase-admin/firestore";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isFromToday = Boolean(url.searchParams.get("fromToday"));
 
-  const snapshot = await adminDb.collection("Expense").get();
+  let results: FirebaseFirestore.QuerySnapshot<
+    FirebaseFirestore.DocumentData,
+    FirebaseFirestore.DocumentData
+  >;
 
-  let filteredDocs = snapshot.docs;
   if (isFromToday) {
-    filteredDocs = snapshot.docs.filter((doc) =>
-      isToday(doc.data().timestamp.toDate())
-    );
+    const startOfTheDayTimestamp = firestore.Timestamp.fromDate(startOfToday());
+    results = await adminDb
+      .collection("Expense")
+      .where("timestamp", ">", startOfTheDayTimestamp)
+      .get();
+  } else {
+    results = await adminDb.collection("Expense").get();
   }
 
   const refinedExpenses: Expense[] = await Promise.all(
-    filteredDocs.map(async (doc) => {
-      const { expenseCategory, amount, timestamp } = doc.data();
+    results.docs.map(async (doc) => {
+      const { expenseCategory, amount } = doc.data();
 
       let ecData = null;
       if (expenseCategory) {
