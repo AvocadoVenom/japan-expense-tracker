@@ -1,9 +1,18 @@
-export const CategoryTag = ({ category }: { category: string | undefined }) => {
+export const CategoryTag = ({
+  category,
+  clickable,
+}: {
+  category: string | undefined;
+  clickable?: boolean;
+}) => {
   return (
     <label
       htmlFor={category}
       className="px-2 text-white rounded"
-      style={{ backgroundColor: getCategoryColor(category) }}
+      style={{
+        backgroundColor: getCategoryColor(category),
+        cursor: clickable ? "pointer" : "hand",
+      }}
     >
       {category ?? "NA"}
     </label>

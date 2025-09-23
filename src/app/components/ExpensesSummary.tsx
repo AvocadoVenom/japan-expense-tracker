@@ -108,7 +108,10 @@ export const ExpensesSummary = ({ rules, expenses, isPast = false }: Props) => {
                     setOpen(true);
                   }}
                 >
-                  <CategoryTag category={state.expenseCategory?.name} />
+                  <CategoryTag
+                    category={state.expenseCategory?.name}
+                    clickable
+                  />
                 </div>
                 <ProgressBar
                   className="grow"
@@ -129,7 +132,7 @@ export const ExpensesSummary = ({ rules, expenses, isPast = false }: Props) => {
         <h2 className="text-xl font-bold mb-2">Expense details</h2>
         <div className="flex flex-col content-stretch gap-2">
           {expenseListDetails.map((exp) => (
-            <div className="flex items-center gap-2">
+            <div key={exp.id} className="flex items-center gap-2">
               <p className="text-nowrap min-w-[35%]">
                 {format(exp.timestamp, "MM-dd HH:mm")}
               </p>

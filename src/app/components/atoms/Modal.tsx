@@ -14,7 +14,7 @@ export const Modal = ({ isOpen, onClose, children }: Props) => {
       <div className="relative bg-white rounded-xl shadow-lg p-6 z-10 w-80">
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 cursor-pointer"
         >
           ✕
         </button>
