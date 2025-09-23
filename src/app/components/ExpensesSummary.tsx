@@ -75,7 +75,7 @@ export const ExpensesSummary = ({ rules, expenses, isPast = false }: Props) => {
                 <ProgressBar
                   progress={(totalConsumed / maxAllowed) * 100}
                   colors={{
-                    main: computeColor(totalConsumed),
+                    main: computeColor((totalConsumed / maxAllowed) * 100),
                     text:
                       (totalConsumed / maxAllowed) * 100 > 85
                         ? "text-white"
