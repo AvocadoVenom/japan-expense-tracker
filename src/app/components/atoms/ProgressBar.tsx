@@ -1,5 +1,3 @@
-"use client";
-
 export const ProgressBar = ({
   progress = 0,
   colors = {

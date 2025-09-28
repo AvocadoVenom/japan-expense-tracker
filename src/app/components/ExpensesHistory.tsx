@@ -1,6 +1,5 @@
 "use client";
 
-import { Expense } from "./atoms/Expense";
 import { useExpenses } from "../api/hooks/expenses";
 import { Expense as ExpenseModel } from "../api/types/types";
 import { useExpenseRules } from "../api/hooks/expense-rules";

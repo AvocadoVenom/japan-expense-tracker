@@ -6,7 +6,7 @@ import { CategoryTag } from "./atoms/CategoryTag";
 import { useState } from "react";
 import { Modal } from "./atoms/Modal";
 import { Expense } from "./atoms/Expense";
-import { format } from "date-fns";
+import { format } from "date-fns/format";
 import { SummaryStatement } from "./atoms/SummaryStatement";
 
 type Props = {

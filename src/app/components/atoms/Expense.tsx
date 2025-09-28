@@ -1,5 +1,3 @@
-"use client";
-
 import { Expense as ExpenseModel } from "@/app/api/types/types";
 import { CategoryTag } from "./CategoryTag";
 

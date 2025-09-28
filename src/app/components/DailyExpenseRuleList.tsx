@@ -1,5 +1,3 @@
-"use client";
-
 import { CategoryTag } from "./atoms/CategoryTag";
 import { useExpenseRules } from "../api/hooks/expense-rules";
 
